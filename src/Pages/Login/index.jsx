@@ -15,7 +15,7 @@ export default function Login() {
     const password = passwordRef.current.value;
 
     if (email.length > 0 && password.length > 0) {
-      fetch("http://localhost:5000/api/auth/signin", {
+      fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         body: JSON.stringify({
           email,
@@ -23,6 +23,7 @@ export default function Login() {
         }),
         headers: {
           "Content-Type": "application/json",
+          namespace: "dashboard",
         },
       })
         .then((response) => {

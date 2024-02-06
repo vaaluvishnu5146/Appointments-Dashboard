@@ -7,6 +7,7 @@ const AuthContext = createContext({
   setIsLoggedIn: () => {},
   currentUser: null,
   setCurrentUser: () => {},
+  decodedToken: {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);
@@ -29,6 +30,7 @@ export default function AuthContextProvider({ children }) {
     setIsLoggedIn,
     setCurrentUser,
     currentUser,
+    decodedToken,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

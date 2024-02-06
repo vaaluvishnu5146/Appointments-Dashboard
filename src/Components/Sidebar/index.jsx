@@ -1,35 +1,13 @@
-import { useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useRef } from "react";
 import Icons from "../../Assets/icons";
 import NavItemExpandable from "../NavItem/NavItemExpandable";
-
-const PRODUCT_ROUTES = [
-  {
-    label: "Create Product",
-    to: "/dashboard/products/create",
-    id: "createProduct",
-  },
-  {
-    label: "Manage Products",
-    to: "/dashboard/products",
-    id: "manageProducts",
-  },
-];
-const OFFER_ROUTES = [
-  {
-    label: "Create Offer",
-    to: "/dashboard/offers/create",
-    id: "createProduct",
-  },
-  {
-    label: "Manage Offers",
-    to: "/dashboard/offers",
-    id: "manageOffers",
-  },
-];
+import { APPLICATION_ROUTES } from "../../Config/Routes.config";
+import { useAuthContext } from "../../Context/AuthContext";
 
 export default function Sidebar() {
   const sidebarRef = useRef(null);
+  const { decodedToken = {} } = useAuthContext();
+  const permissions = decodedToken?.roles;
 
   function handleSidebarToggle() {
     if (sidebarRef.current.classList.contains("toggled")) {
@@ -37,6 +15,20 @@ export default function Sidebar() {
     } else {
       sidebarRef.current.classList.add("toggled");
     }
+  }
+
+  function renderNavItems(route, index) {
+    return (
+      <React.Fragment>
+        <hr className="sidebar-divider d-none d-md-block" />
+        <NavItemExpandable
+          key={`${route.title}-${index}`}
+          id={route.id}
+          label={route.title}
+          routes={route?.children}
+        />
+      </React.Fragment>
+    );
   }
 
   return (
@@ -49,19 +41,16 @@ export default function Sidebar() {
         <div className="sidebar-brand-icon rotate-n-15">
           <i className="fas fa-laugh-wink"></i>
         </div>
-        <div className="sidebar-brand-text mx-3">ByOnline</div>
+        <div className="sidebar-brand-text mx-3">UMP PORTAL</div>
       </div>
 
-      <hr className="sidebar-divider" />
-
-      <NavItemExpandable
-        id="products"
-        label="Products"
-        routes={PRODUCT_ROUTES}
-      />
-      <NavItemExpandable id="offer" label="Offers" routes={OFFER_ROUTES} />
-
-      <hr className="sidebar-divider d-none d-md-block" />
+      <div>
+        {APPLICATION_ROUTES[1].children.map((route, index) => {
+          if (permissions?.indexOf(route.permission) > -1 && route.children) {
+            return renderNavItems(route, index);
+          }
+        })}
+      </div>
 
       <div className="text-center d-none d-md-inline">
         <button
@@ -75,3 +64,24 @@ export default function Sidebar() {
     </ul>
   );
 }
+// <hr className="sidebar-divider d-none d-md-block" />
+
+//         <NavItemExpandable
+//           id="hospital"
+//           label="Hospitals"
+//           routes={HOSPITAL_ROUTES}
+//         />
+
+//         <hr className="sidebar-divider d-none d-md-block" />
+//         <NavItemExpandable
+//           id="doctor"
+//           label="Doctors"
+//           routes={DOCTORS_ROUTES}
+//         />
+
+//         <hr className="sidebar-divider d-none d-md-block" />
+//         <NavItemExpandable
+//           id="appointments"
+//           label="Appointments"
+//           routes={APPOINTMENT_ROUTES}
+//         />

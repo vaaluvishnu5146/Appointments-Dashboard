@@ -43,10 +43,10 @@ export default function NavItemExpandable({
           {routes.map((route, index) => (
             <Link
               className="collapse-item"
-              to={route.to}
+              to={route.path}
               key={`${route.id}-${index}`}
             >
-              {route.label}
+              {route.title}
             </Link>
           ))}
         </div>
